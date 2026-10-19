@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Редактировать режиссёра{% endblock %}
+{% block content %}
+<h2>Редактировать режиссёра #{{ director_id }}</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+        {{ form.name.label(class="form-label") }}
+        {{ form.name(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.birthday.label(class="form-label") }}
+        {{ form.birthday(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.gender.label(class="form-label") }}
+        {{ form.gender(class="form-select") }}
+    </div>
+    {{ form.submit(class="btn btn-success") }}
+    <a href="{{ url_for('manage_directors') }}" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock %}

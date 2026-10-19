@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}{{ director[1] }}{% endblock %}
+{% block content %}
+<h2>{{ director[1] }}</h2>
+<p><strong>Дата рождения:</strong> {{ director[2] }}</p>
+<p><strong>Пол:</strong> {{ director[3] }}</p>
+
+<h3>Фильмы</h3>
+<div class="row">
+    {% for film in films %}
+    <div class="col-md-3 mb-3">
+        <div class="card">
+            <img src="{{ url_for('static', filename=film[3]) }}" class="card-img-top" alt="Постер" style="height: 200px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title"><a href="{{ url_for('film_detail', film_id=film[0]) }}">{{ film[1] }}</a></h5>
+                <p class="card-text">{{ film[2] }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

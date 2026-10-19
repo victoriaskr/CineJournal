@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Рекомендации{% endblock %}
+{% block content %}
+<h2>Рекомендации фильмов</h2>
+
+<!-- Блок рекомендаций по любимым жанрам -->
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">На основе ваших любимых жанров</h5>
+        <form method="POST">
+            <button type="submit" name="by_favorites" class="btn btn-success">Показать фильмы</button>
+        </form>
+    </div>
+</div>
+
+<!-- Блок поиска по описанию -->
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">Поиск по описанию (с помощью ИИ)</h5>
+        <form method="POST">
+            <div class="mb-3">
+                <label for="description" class="form-label">Опишите, какой фильм вы хотите посмотреть</label>
+                <textarea name="description" id="description" class="form-control" rows="2" placeholder="Например: грустный фильм про любовь с красивой музыкой">{{ description or '' }}</textarea>
+            </div>
+            <button type="submit" name="by_description" class="btn btn-primary">Найти фильмы</button>
+        </form>
+    </div>
+</div>
+
+<!-- Отображение результатов -->
+{% if films %}
+    <h4>Найденные фильмы ({{ films|length }})</h4>
+    <div class="row">
+        {% for film in films %}
+        <div class="col-md-3 mb-3">
+            <div class="card h-100">
+                <img src="{{ url_for('static', filename=film[3]) }}" class="card-img-top" alt="Постер" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{{ url_for('film_detail', film_id=film[0]) }}">{{ film[1] }}</a></h5>
+                    <p class="card-text">{{ film[2] }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% elif search_method and not films %}
+    <div class="alert alert-info">На данный момент в каталоге нет подходящих фильмов, но Вы можете подождать, пока их добавят модераторы.</div>
+{% endif %}
+{% endblock %}

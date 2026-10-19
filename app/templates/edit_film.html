@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Редактировать фильм{% endblock %}
+{% block content %}
+<h2>Редактировать фильм #{{ film_id }}</h2>
+<form method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+        {{ form.name.label(class="form-label") }}
+        {{ form.name(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.description.label(class="form-label") }}
+        {{ form.description(class="form-control", rows="4") }}
+    </div>
+    <div class="mb-3">
+        {{ form.actors.label(class="form-label") }}
+        {{ form.actors(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.date.label(class="form-label") }}
+        {{ form.date(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.id_director.label(class="form-label") }}
+        {{ form.id_director(class="form-select") }}
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Жанры</label>
+        <div class="border p-2" style="max-height:200px; overflow-y:auto;">
+            {% for subfield in form.genres %}
+                <div class="form-check">
+                    {{ subfield(class="form-check-input") }}
+                    {{ subfield.label(class="form-check-label") }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="mb-3">
+        {{ form.poster.label(class="form-label") }}
+        {{ form.poster(class="form-control") }}
+        <small class="text-muted">Оставьте пустым, чтобы не менять постер</small>
+    </div>
+    {{ form.submit(class="btn btn-success") }}
+    <a href="{{ url_for('manage_films') }}" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock %}

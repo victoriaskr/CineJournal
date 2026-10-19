@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Главная страница{% endblock %}
+{% block content %}
+<h2>Добро пожаловать в MovieApp!</h2>
+
+<form method="GET" action="{{ url_for('index') }}" class="mb-4">
+    <div class="input-group">
+        <input type="text" name="q" class="form-control" placeholder="Поиск по названию фильма или режиссёру" value="{{ query or '' }}">
+        <button type="submit" class="btn btn-primary">Найти</button>
+    </div>
+</form>
+
+{% if query %}
+    <h3>Результаты поиска для "{{ query }}"</h3>
+    {% if films %}
+        <div class="row">
+            {% for film in films %}
+            <div class="col-md-3 mb-3">
+                <div class="card">
+                    <img src="{{ url_for('static', filename=film[4]) }}" class="card-img-top" alt="Постер" style="height: 300px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="{{ url_for('film_detail', film_id=film[0]) }}">{{ film[1] }}</a></h5>
+                        <p class="card-text">{{ film[3] }} ({{ film[2] }})</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Ничего не найдено.</p>
+    {% endif %}
+{% else %}
+    <p>Это приложение создано для всех любителей фильмов. Модераторы могут добавлять фильмы, пользователи создавать списки</p>
+    <p>Если Вы хотите добавить фильм или любимого режиссера в каталог, зарегистрируйте аккаунт типа "Модератор" (moderator)</p>
+    <p>Если Вы хотите создавать списки фильмов и писать рецензии, а также получать рекомендации фильмов, войдите в систему как пользователь.</p>
+    <p>Приятного просмотра! :))</p>
+    {% if current_user.is_authenticated %}
+        {% if current_user.role == 'user' %}
+            <h3>Инструменты</h3>
+            <div class="d-grid gap-2 d-md-block mb-3">
+                <a href="{{ url_for('analyze_interests') }}" class="btn btn-outline-primary">Анализ интересов</a>
+                <a href="{{ url_for('recommendations') }}" class="btn btn-outline-primary">Рекомендации фильмов</a>
+            </div>
+        {% elif current_user.role == 'moderator' %}
+            <!-- для модератора -->
+        {% endif %}
+    {% else %}
+        <p><a href="{{ url_for('login') }}">Войдите</a>, чтобы начать.</p>
+    {% endif %}
+{% endif %}
+{% endblock %}
